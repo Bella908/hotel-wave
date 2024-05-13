@@ -1,12 +1,19 @@
-import main2 from '../../../src/assets/main2.mp4'
+
 
 
 const Banner = () => {
     return (
         <div className='relative'>
-         <video src={main2} autoPlay loop></video>
-        
-        </div>
+        <iframe 
+            width="1370" 
+            height="1000" 
+            src="https://www.youtube.com/embed/cmfeMfdYRFs?autoplay=1&loop=1&playlist=cmfeMfdYRFs" 
+            title="YouTube video player" 
+            frameborder="0" 
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+            allowfullscreen
+        ></iframe>
+    </div>
     );
 };
 
