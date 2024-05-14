@@ -2,6 +2,7 @@
 import NewsLatter from "../NewsLatter";
 import Banner from "./Banner";
 import FeatureRoom from "./FeatureRoom";
+import Map from "./Map";
 
 
 
@@ -14,6 +15,8 @@ const Home = () => {
             <FeatureRoom></FeatureRoom>
            
             <NewsLatter></NewsLatter>
+            <Map></Map>
+            
         </div>
     );
 };

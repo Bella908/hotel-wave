@@ -26,7 +26,7 @@ const Rooms = () => {
                 <h5 className="font-Briem text-4xl mb-6">Rooms</h5>
                 <h2>With 50 comfortable and well-furnished rooms, we offer you a welcoming <br /> and refined environment for your stay. Ease of access is guaranteed thanks to <br /> the lift that connects all floors, making our hotel an accessible place even for <br /> those with mobility difficulties</h2>
             </div>
-            <div className='grid grid-cols-2 gap-1 justify-center'>
+            <div className='grid grid-cols-1 lg:grid-cols-2 gap-1 justify-center'>
 
        {
           roomss.map(room => <Room key={roomss._id} room ={room} ></Room>)
