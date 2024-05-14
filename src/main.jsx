@@ -15,6 +15,7 @@ import Rooms from './Home/Rooms/Rooms';
 import RoomDetails from './Home/Rooms/RoomDetails';
 import Error from './Error';
 import MyLists from './MyList/MyLists';
+import FeatureRoom from './Home/Home/FeatureRoom';
 
 const router = createBrowserRouter([
   {
@@ -58,6 +59,14 @@ const router = createBrowserRouter([
         
           path:'/myList',
           element:<MyLists></MyLists>,
+          
+      
+      },
+      {
+        
+          path:'/feature',
+          element:<FeatureRoom></FeatureRoom>,
+          loader: () => fetch('http://localhost:5000/feature'),
           
       
       },

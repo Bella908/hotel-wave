@@ -1,14 +1,18 @@
+
 import NewsLatter from "../NewsLatter";
-import Rooms from "../Rooms/Rooms";
 import Banner from "./Banner";
+import FeatureRoom from "./FeatureRoom";
+
 
 
 
 const Home = () => {
+    
     return (
         <div>
             <Banner></Banner>
-          
+            <FeatureRoom></FeatureRoom>
+           
             <NewsLatter></NewsLatter>
         </div>
     );
