@@ -13,11 +13,14 @@ import AuthProvider from './AuthProvider/AuthProvider';
 import Register from './Users/Register';
 import Rooms from './Home/Rooms/Rooms';
 import RoomDetails from './Home/Rooms/RoomDetails';
+import Error from './Error';
+import MyLists from './MyList/MyLists';
 
 const router = createBrowserRouter([
   {
     path: "/",
     element:<Root></Root>,
+    errorElement: <Error></Error>,
     children:[
       {
         
@@ -49,6 +52,13 @@ const router = createBrowserRouter([
           path:'/rooms/:id',
           element:<RoomDetails></RoomDetails>,
           loader: ({params}) => fetch(`http://localhost:5000/rooms/${params.id}`),
+      
+      },
+      {
+        
+          path:'/myList',
+          element:<MyLists></MyLists>,
+          
       
       },
     ]
