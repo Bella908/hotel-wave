@@ -16,6 +16,7 @@ import RoomDetails from './Home/Rooms/RoomDetails';
 import Error from './Error';
 import MyLists from './MyList/MyLists';
 import FeatureRoom from './Home/Home/FeatureRoom';
+import ProtectedRout from './Privet Route/ProtectedRout';
 
 const router = createBrowserRouter([
   {
@@ -57,8 +58,10 @@ const router = createBrowserRouter([
       },
       {
         
-          path:'/myList',
-          element:<MyLists></MyLists>,
+          path:'/myBooking',
+          element:<ProtectedRout>
+            <MyLists></MyLists>,
+          </ProtectedRout>
           
       
       },
