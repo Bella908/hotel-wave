@@ -17,6 +17,7 @@ import Error from './Error';
 import MyLists from './MyList/MyLists';
 import FeatureRoom from './Home/Home/FeatureRoom';
 import ProtectedRout from './Privet Route/ProtectedRout';
+import Update from './MyList/Update';
 
 const router = createBrowserRouter([
   {
@@ -70,6 +71,17 @@ const router = createBrowserRouter([
           path:'/feature',
           element:<FeatureRoom></FeatureRoom>,
           loader: () => fetch('http://localhost:5000/feature'),
+          
+          
+        },
+        {
+          
+          // path:'/myBooking/update/:id',
+          // element:<Update></Update>,
+          // loader: ({params}) => fetch(`http://localhost:5000//myBooking/update/${params.id}`),
+    
+          
+          
           
       
       },

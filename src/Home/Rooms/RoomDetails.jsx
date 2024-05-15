@@ -133,7 +133,8 @@ const RoomDetails = () => {
     className="border p-2 rounded-md"
     selected={startDate}
     onChange={(date) => setStartDate(date)}
-    dateFormat="dd/MM/yyyy" // Set the date format here
+    dateFormat="dd/MM/yyyy" 
+    showTimeSelect={false} 
 />
 
                                 </div>
