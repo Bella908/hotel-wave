@@ -3,6 +3,7 @@ import { AuthContext } from "../../AuthProvider/AuthProvider";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 
 const FeatureRooms = ({room}) => {
@@ -48,7 +49,20 @@ const FeatureRooms = ({room}) => {
   <p>{RoomDescription}</p>
   
     <div className="card-actions">
-    <button className="btn bg-[#043BD4] text-white" onClick={() => setIsOpen(true)}>Book Now</button>
+    {
+                        user?
+                        <>
+                        <button className="btn bg-[#043BD4] text-white" onClick={() => setIsOpen(true)}>Book Now</button>
+                      
+                        </> :
+
+                  <>
+                  <Link to="/login">
+                  
+                    <button className="btn bg-[#043BD4] text-white">Book Now</button>
+                  </Link>   
+                  </>   
+                    }
     </div>
 
   </div>

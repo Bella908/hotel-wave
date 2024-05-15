@@ -1,5 +1,5 @@
-import { useContext, useState } from "react";
-import { useLoaderData } from "react-router-dom";
+import { useContext, useEffect, useState } from "react";
+import { Link, useLoaderData } from "react-router-dom";
 import { AuthContext } from "../../AuthProvider/AuthProvider";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -8,22 +8,25 @@ import axios from "axios";
 const RoomDetails = () => {
     const [isOpen, setIsOpen] = useState(false); // Changed initial state to false
     const [startDate, setStartDate] = useState(new Date());
+    const [review , setReviews] = useState();
     const room = useLoaderData();
     const { user } = useContext(AuthContext);
-    const [reviewContent, setReviewContent] = useState(""); 
+    const [reviewContent, setReviewContent] = useState("");
     const [rating, setRating] = useState(0);
 
-    const { category, RoomImage, RoomDescription, PricePerNight, RoomSize , _id } = room;
+    const { category, RoomImage, RoomDescription, PricePerNight, RoomSize, _id } = room;
 
+
+    // booking
     const handleBooking = async e => {
         e.preventDefault();
         const form = e.target;
         const name = form.roomName.value;
         const email = form.email.value;
         const deadline = startDate;
-        const roomId = {_id} 
-        const bookData ={
-            name , email,deadline , roomId
+        const roomId = { _id }
+        const bookData = {
+            name, email, deadline, roomId
         }
         try {
             const response = await axios.post('http://localhost:5000/booking', bookData);
@@ -31,7 +34,7 @@ const RoomDetails = () => {
         } catch (error) {
             console.error("Error occurred during booking:", error);
         }
-         setIsOpen(false);
+        setIsOpen(false);
     }
 
     // review
@@ -40,9 +43,9 @@ const RoomDetails = () => {
         const reviewData = {
             content: reviewContent,
             rating: rating,
-           
-            roomId: room._id, 
-            userId: user.email, 
+
+            roomId: room._id,
+            userId: user.email,
         };
 
         try {
@@ -53,6 +56,23 @@ const RoomDetails = () => {
             console.error("Error occurred during review submission:", error);
         }
     };
+  
+   
+
+    useEffect(() => {
+        const fetchReviews = async () => {
+            try {
+                const response = await axios.get(`http://localhost:5000/review?roomId=${_id}`);
+                setReviews(response.data);
+            } catch (error) {
+                console.error("Error fetching reviews:", error);
+            }
+        };
+        fetchReviews();
+    }, [_id]);
+
+
+
 
     return (
         <div>
@@ -74,34 +94,50 @@ const RoomDetails = () => {
 
                 <div className="my-10 ml-20">
                     {/* Modal Trigger Button */}
-                    <button className="btn bg-[#043BD4] text-white" onClick={() => setIsOpen(true)}>Book Now</button>
+                    {
+                        user?
+                        <>
+                        <button className="btn bg-[#043BD4] text-white" onClick={() => setIsOpen(true)}>Book Now</button>
+                      
+                        </> :
+
+                  <>
+                  <Link to="/login">
+                  
+                    <button className="btn bg-[#043BD4] text-white">Book Now</button>
+                  </Link>   
+                  </>   
+                    }
                 </div>
 
-              {/* Room details rendering code goes here */}
+                {/* Room details rendering code goes here */}
 
-            {/* Review section */}
-            <div className="ml-20">
-    <h4 className="text-3xl font-Briem text-center mb-4">Post a Review</h4>
-    <div className="flex items-center mb-4">
-        <h4 className="mx-2">Rating : </h4>
-        <input
-            type="number"
-            className="input input-primary w-16 mr-4"
-            placeholder="Rating"
-            value={rating}
-            onChange={(e) => setRating(e.target.value)}
-        />
-        <textarea
-            className="textarea textarea-primary w-15"
-            placeholder="Write your review here..."
-            value={reviewContent}
-            onChange={(e) => setReviewContent(e.target.value)}
-        ></textarea>
-    <button className="btn btn-outline border-rose-400 text-rose-400 ml-4" onClick={handleReviewSubmit}>
-        Submit Review
-    </button>
-    </div>
-</div>
+                {/* Review section */}
+                <div>
+                    
+                </div>
+                <div className="ml-20">
+                    <h4 className="text-3xl font-Briem text-center mb-4">Post a Review</h4>
+                    <div className="flex items-center mb-4">
+                        <h4 className="mx-2">Rating : </h4>
+                        <input
+                            type="number"
+                            className="input input-primary w-16 mr-4"
+                            placeholder="Rating"
+                            value={rating}
+                            onChange={(e) => setRating(e.target.value)}
+                        />
+                        <textarea
+                            className="textarea textarea-primary w-15"
+                            placeholder="Write your review here..."
+                            value={reviewContent}
+                            onChange={(e) => setReviewContent(e.target.value)}
+                        ></textarea>
+                        <button className="btn btn-outline border-rose-400 text-rose-400 ml-4" onClick={handleReviewSubmit}>
+                            Submit Review
+                        </button>
+                    </div>
+                </div>
 
             </div>
 
@@ -116,37 +152,37 @@ const RoomDetails = () => {
                             </div>
                             <div className="mt-5 text-center">
                                 <h3 className="text-lg font-medium text-gray-800 dark:text-white" id="modal-title">
-                                {category}
+                                    {category}
                                 </h3>
                                 <p className="mt-2 text-gray-500 dark:text-gray-400">
-                                {RoomDescription}
+                                    {RoomDescription}
                                 </p>
                             </div>
-                                <form onSubmit={handleBooking}>
-                            <div className=" items-center justify-between w-full mt-5 gap-x-2">
-                                <input type="text" value= {category} className="flex-1 block h-10 px-4 text-sm text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring" name="roomName" />
-                        
-                                <input type="email" defaultValue={user.email} className="flex-1 block h-10 mt-2 px-4 text-sm text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring" name="email" />
-                                <div className=" mt-3 ml-3">
-                                    <h3>Pick a date</h3>
-                                    <DatePicker
-    className="border p-2 rounded-md"
-    selected={startDate}
-    onChange={(date) => setStartDate(date)}
-    dateFormat="dd/MM/yyyy" 
-    showTimeSelect={false} 
-/>
+                            <form onSubmit={handleBooking}>
+                                <div className=" items-center justify-between w-full mt-5 gap-x-2">
+                                    <input type="text" value={category} className="flex-1 block h-10 px-4 text-sm text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring" name="roomName" />
 
+                                    <input type="email" defaultValue={user.email} className="flex-1 block h-10 mt-2 px-4 text-sm text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring" name="email" />
+                                    <div className=" mt-3 ml-3">
+                                        <h3>Pick a date</h3>
+                                        <DatePicker
+                                            className="border p-2 rounded-md"
+                                            selected={startDate}
+                                            onChange={(date) => setStartDate(date)}
+                                            dateFormat="dd/MM/yyyy"
+                                            showTimeSelect={false}
+                                        />
+
+                                    </div>
                                 </div>
-                            </div>
-                            <div className="mt-4 sm:flex sm:items-center sm:justify-between sm:mt-6 sm:-mx-2">
-                                <button onClick={() => setIsOpen(false)} className="px-4 sm:mx-2 w-full py-2.5 text-sm font-medium dark:text-gray-200 dark:border-gray-700 dark:hover:bg-gray-800 tracking-wide text-gray-700 capitalize transition-colors duration-300 transform border border-gray-200 rounded-md hover:bg-gray-100 focus:outline-none focus:ring focus:ring-gray-300 focus:ring-opacity-40">
-                                    Cancel
-                                </button>
-                                <button  type="submit" className="px-4 sm:mx-2 w-full py-2.5 mt-3 sm:mt-0 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-600 rounded-md hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40">
-                                    Confirm
-                                </button>
-                            </div>
+                                <div className="mt-4 sm:flex sm:items-center sm:justify-between sm:mt-6 sm:-mx-2">
+                                    <button onClick={() => setIsOpen(false)} className="px-4 sm:mx-2 w-full py-2.5 text-sm font-medium dark:text-gray-200 dark:border-gray-700 dark:hover:bg-gray-800 tracking-wide text-gray-700 capitalize transition-colors duration-300 transform border border-gray-200 rounded-md hover:bg-gray-100 focus:outline-none focus:ring focus:ring-gray-300 focus:ring-opacity-40">
+                                        Cancel
+                                    </button>
+                                    <button type="submit" className="px-4 sm:mx-2 w-full py-2.5 mt-3 sm:mt-0 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-600 rounded-md hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40">
+                                        Confirm
+                                    </button>
+                                </div>
                             </form>
                         </div>
                     </div>
