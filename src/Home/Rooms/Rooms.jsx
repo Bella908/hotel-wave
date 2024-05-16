@@ -29,12 +29,16 @@ const Rooms = () => {
             <div className='grid grid-cols-1 lg:grid-cols-2 gap-1 justify-center'>
 
        {
-          roomss.map(room => <Room key={roomss._id} room ={room} ></Room>)
+
+          roomss.filter(r => r.status === 'true')
+          .map(room => <Room key={roomss._id} room ={room} ></Room>)
        }
 
             </div>
         </div>
     );
 };
+
+// 
 
 export default Rooms;

@@ -12,6 +12,10 @@ const MyLists = () => {
     const { user } = useContext(AuthContext);
     const [bookings, setBookings] = useState([]);
     const [control, setControl] = useState(false);
+    const [review, setReviews] = useState([]);
+    const [reviewContent, setReviewContent] = useState("");
+    const [rating, setRating] = useState(0);
+    const [isOpens, setIsOpens] = useState(false);
     const [isOpen, setIsOpen] = useState(null); // Changed initial state to false
     const [startDate, setStartDate] = useState(new Date());
 
@@ -24,7 +28,7 @@ const MyLists = () => {
             .then(data => setBookings(data))
     }, [url])
 
-    const handleDelete = (id) => {
+    const handleDelete = async (id) => {
         // Display SweetAlert confirmation dialog
         Swal.fire({
             title: "Are you sure?",
@@ -55,7 +59,49 @@ const MyLists = () => {
                     });
             }
         });
+
+            const { data } = await axios.patch(
+                `http://localhost:5000/booking/${id}`, { status : 'true' }
+            )
+            console.log(data)
+        
+    
+    
     };
+
+
+// review
+const handleReviewSubmit = async (e) => {
+    e.preventDefault();
+    const reviewData = {
+        content: reviewContent,
+        rating: rating,
+        roomId: bookings._id,
+        userId: user.email,
+        userName: user.displayName,
+    };
+
+    try {
+        const response = await axios.post("http://localhost:5000/review", reviewData);
+        console.log(response.data);
+
+        // Add the newly submitted review to the existing reviews
+        setReviews([...review, response.data]);
+        setReviewContent(""); // Clear the review content input field
+        setRating(0); // Reset the rating input field
+
+        Swal.fire({
+            icon: 'success',
+            title: 'Thank you for your review',
+            showConfirmButton: false,
+            timer: 1500 // Close the alert after 1.5 seconds
+        });
+
+    } catch (error) {
+        console.error("Error occurred during review submission:", error);
+    }
+    setIsOpens(false);
+};
 
 
 
@@ -163,9 +209,45 @@ const MyLists = () => {
                                     <button onClick={() => handleDelete(book._id)} className="btn btn-outline btn-error">Cancel</button>
                                     <div className="mt-3">
 
-                                    <Link to={`/rooms/${book._id}`}>
-                                    <button  className="btn btn-outline btn-info">Post a Review</button>
-                                    </Link>
+                                    <button className="btn bg-[#043BD4] text-white" onClick={() => setIsOpens(true)}>Post a review</button>
+                                    {isOpens && (
+                <div className="fixed inset-0 z-10 overflow-y-auto" id="my_modal_4">
+                    <div className="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+                        <span className="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+                        <div className="relative inline-block p-4 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl sm:max-w-sm rounded-xl dark:bg-gray-900 sm:my-8 sm:w-full sm:p-6">
+                            <div className="flex items-center justify-center mx-auto">
+                            </div>
+                                <form onSubmit={ handleReviewSubmit}>
+                            <div className=" items-center justify-between w-full mt-5 gap-x-2">
+                            <input
+                            type="number"
+                            className="input input-primary w-16 mr-4"
+                            placeholder="Rating"
+                            value={rating}
+                            onChange={(e) => setRating(e.target.value)}
+                        />
+                                <input type="email" defaultValue={user.email} className="flex-1 block h-10 mt-2 px-4 text-sm text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring" name="email" />
+                                <div className=" mt-3 ml-3">
+                                <textarea
+                            className="textarea textarea-primary w-15"
+                            placeholder="Write your review here..."
+                            value={reviewContent}
+                            onChange={(e) => setReviewContent(e.target.value)}
+                        ></textarea>
+                                </div>
+                            </div>
+                            <div className="mt-4 sm:flex sm:items-center sm:justify-between sm:mt-6 sm:-mx-2">
+                              
+                                    <button  type="submit" className="px-4 sm:mx-2 w-full py-2.5 mt-3 sm:mt-0 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-600 rounded-md hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40">
+                                    Confirm
+                                </button>
+                            </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            )}
+                      
                                     </div>
 
                                 </td>

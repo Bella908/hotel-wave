@@ -9,70 +9,86 @@ import Swal from "sweetalert2";
 const RoomDetails = () => {
     const [isOpen, setIsOpen] = useState(false); // Changed initial state to false
     const [startDate, setStartDate] = useState(new Date());
+
+    const [booking, setBookings] = useState([]);
     const [review, setReviews] = useState([]);
     const room = useLoaderData();
     const { user } = useContext(AuthContext);
     const [reviewContent, setReviewContent] = useState("");
     const [rating, setRating] = useState(0);
-    const [roomm , setRoom] = useState([]);
+    const [roomm, setRoom] = useState([]);
 
-    const { category, RoomImage, RoomDescription, PricePerNight, RoomSize, _id ,Availability
+    const { category, RoomImage, RoomDescription, PricePerNight, RoomSize, _id, status
     } = room;
 
-  
+
 
 
 
 
     // booking
-   // booking
-   const handleBooking = async e => {
-    e.preventDefault();
-    const form = e.target;
-    const name = form.roomName.value;
-    const email = form.email.value;
-    const deadline = startDate;
-    const roomId = { _id }
-    const bookData = {
-        name, email, deadline, roomId
-    }
-    try {
-        const response = await axios.post('http://localhost:5000/booking', bookData);
-        console.log(response.data);
-    } catch (error) {
-        console.error("Error occurred during booking:", error);
-    }
-    setIsOpen(false);
-    
-    
-}
-
-
-
-    // review
-    // review
-    const handleReviewSubmit = async (e) => {
+    const handleBooking = async e => {
         e.preventDefault();
-        const reviewData = {
-            content: reviewContent,
-            rating: rating,
-            roomId: room._id,
-            userId: user.email,
-            userName : user.displayName,
-        };
-
-        try {
-            const response = await axios.post("http://localhost:5000/review", reviewData);
-            console.log(response.data);
-
-            // Add the newly submitted review to the existing reviews
-            setReviews([...review, response.data]);
-            setReviewContent(""); // Clear the review content input field
-            setRating(0); // Reset the rating input field
-        } catch (error) {
-            console.error("Error occurred during review submission:", error);
+        const form = e.target;
+        const name = form.roomName.value;
+        const email = form.email.value;
+        const deadline = startDate;
+        const roomId = { _id }
+        const bookData = {
+            name, email, deadline, roomId
         }
-    };
+        try {
+            const response = await axios.post('http://localhost:5000/booking', bookData);
+            console.log(response.data);
+            Swal.fire({
+                position: "center",
+                icon: "success",
+                title: "Booking Confirmed",
+                showConfirmButton: false,
+                timer: 1500
+            });
+        } catch (error) {
+            console.error("Error occurred during booking:", error);
+        }
+        setIsOpen(false);
+
+
+    }
+
+    // status
+    const handleStatus = async (id, prevStatus, status) => {
+        const { data } = await axios.patch(
+            `http://localhost:5000/booking/${id}`, { status }
+        )
+        console.log(data)
+    }
+
+
+    // review
+    // review
+    // const handleReviewSubmit = async (e) => {
+    //     e.preventDefault();
+    //     const reviewData = {
+    //         content: reviewContent,
+    //         rating: rating,
+    //         roomId: room._id,
+    //         userId: user.email,
+    //         userName: user.displayName,
+    //     };
+
+    //     try {
+    //         const response = await axios.post("http://localhost:5000/review", reviewData);
+    //         console.log(response.data);
+
+    //         // Add the newly submitted review to the existing reviews
+    //         setReviews([...review, response.data]);
+    //         setReviewContent(""); // Clear the review content input field
+    //         setRating(0); // Reset the rating input field
+
+    //     } catch (error) {
+    //         console.error("Error occurred during review submission:", error);
+    //     }
+    // };
 
 
 
@@ -101,7 +117,22 @@ const RoomDetails = () => {
 
                 <div>
                     <div className="space-y-3 ml-20 mt-32">
-                        <h4 className="text-4xl">{category}</h4>
+                        <div className="flex gap-2">
+                            <h4 className="text-4xl">{category}</h4>
+                            {
+                                status === 'flase' ? (
+                                    <button className="btn bg-red-500 text-white">
+                                        Unavailable
+                                    </button>
+                                ) : (
+                                    <button className="btn bg-green-400 text-white" >
+                                        Available
+                                    </button>
+                                )
+                            }
+
+
+                        </div>
                         <p className="text-xl">{RoomDescription}</p>
                         <div className="flex gap-10 text-xl">
                             <p>price : {PricePerNight}</p>
@@ -115,7 +146,7 @@ const RoomDetails = () => {
                     {
                         user ?
                             <>
-                                <button className="btn bg-[#043BD4] text-white" onClick={() => setIsOpen(true)}>Book Now</button>
+                                <button className="btn bg-[#043BD4] text-white" onClick={() => setIsOpen(true)} disabled={status === 'flase'} >Book Now</button>
 
                             </> :
 
@@ -132,9 +163,10 @@ const RoomDetails = () => {
                 {/* Room details rendering code goes here */}
 
                 {/* Review section */}
-                <div>
+ 
+                <div className="mb-10">
                     <div>
-                    <h4 className="text-3xl font-Briem text-center my-6">Reviews</h4>
+                        <h4 className="text-3xl font-Briem text-center my-6">Reviews</h4>
                     </div>
                     {
                         review.map(reviews => <div key={reviews.id}>
@@ -143,14 +175,14 @@ const RoomDetails = () => {
                                 <div className="flex">
 
                                     <div className="" >
-                                        
+
 
                                         <h4 className=" m-4">{reviews.userName}</h4>
-                                    
+
                                     </div>
                                 </div>
                                 <div className=" m-4">
-                                   
+
                                     <p>Rating : {reviews.rating}</p>
                                     <p>Comment: {reviews.content}</p>
 
@@ -159,11 +191,11 @@ const RoomDetails = () => {
                                 </div>
                             </div>
                         </div>
-                
+
                         )
-                        }
+                    }
                 </div>
-                <div className="ml-20 mt-24">
+                {/* <div className="ml-20 mt-24">
                     <h4 className="text-3xl font-Briem text-center mb-4">Post a Review</h4>
                     <div className="flex items-center mb-4">
                         <h4 className="mx-2">Rating : </h4>
@@ -184,7 +216,7 @@ const RoomDetails = () => {
                             Submit Review
                         </button>
                     </div>
-                </div>
+                </div> */}
 
             </div>
 
@@ -226,7 +258,8 @@ const RoomDetails = () => {
                                     <button onClick={() => setIsOpen(false)} className="px-4 sm:mx-2 w-full py-2.5 text-sm font-medium dark:text-gray-200 dark:border-gray-700 dark:hover:bg-gray-800 tracking-wide text-gray-700 capitalize transition-colors duration-300 transform border border-gray-200 rounded-md hover:bg-gray-100 focus:outline-none focus:ring focus:ring-gray-300 focus:ring-opacity-40">
                                         Cancel
                                     </button>
-                                    <button type="submit" onClick={() => handleStatus} className="px-4 sm:mx-2 w-full py-2.5 mt-3 sm:mt-0 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-600 rounded-md hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40">
+                                    <button type="submit" onClick={() => handleStatus(_id, status, 'flase')}
+                                        className="px-4 sm:mx-2 w-full py-2.5 mt-3 sm:mt-0 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-600 rounded-md hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40">
                                         Confirm
                                     </button>
                                 </div>

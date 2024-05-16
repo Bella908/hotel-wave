@@ -4,10 +4,11 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import Swal from "sweetalert2";
 
 
 const FeatureRooms = ({room}) => {
-    const{category , RoomImage ,RoomDescription , PricePerNight ,_id} = room;
+    const{category , RoomImage ,RoomDescription , PricePerNight ,_id,status} = room;
 
     const [isOpen, setIsOpen] = useState(false); // Changed initial state to false
     const [startDate, setStartDate] = useState(new Date());
@@ -27,11 +28,25 @@ const FeatureRooms = ({room}) => {
       try {
           const response = await axios.post('http://localhost:5000/booking', bookData);
           console.log(response.data);
+          Swal.fire({
+            position: "center",
+            icon: "success",
+            title: "Booking Confirmed",
+            showConfirmButton: false,
+            timer: 1500
+        });
       } catch (error) {
           console.error("Error occurred during booking:", error);
       }
        setIsOpen(false);
   }
+
+  const handleStatus = async (id, prevStatus, status) => {
+    const { data } = await axios.patch(
+        `http://localhost:5000/feature-room/${id}`, { status }
+    )
+    console.log(data)
+}
 
 
 
@@ -52,7 +67,7 @@ const FeatureRooms = ({room}) => {
     {
                         user?
                         <>
-                        <button className="btn bg-[#043BD4] text-white" onClick={() => setIsOpen(true)}>Book Now</button>
+                        <button className="btn bg-[#043BD4] text-white" onClick={() => setIsOpen(true)} disabled={status === 'flase'}>Book Now</button>
                       
                         </> :
 
@@ -101,7 +116,7 @@ const FeatureRooms = ({room}) => {
                                 <button onClick={() => setIsOpen(false)} className="px-4 sm:mx-2 w-full py-2.5 text-sm font-medium dark:text-gray-200 dark:border-gray-700 dark:hover:bg-gray-800 tracking-wide text-gray-700 capitalize transition-colors duration-300 transform border border-gray-200 rounded-md hover:bg-gray-100 focus:outline-none focus:ring focus:ring-gray-300 focus:ring-opacity-40">
                                     Cancel
                                 </button>
-                                <button  type="submit" className="px-4 sm:mx-2 w-full py-2.5 mt-3 sm:mt-0 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-600 rounded-md hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40">
+                                    <button  type="submit" onClick={() => handleStatus(_id, status, 'flase')} className="px-4 sm:mx-2 w-full py-2.5 mt-3 sm:mt-0 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-600 rounded-md hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40">
                                     Confirm
                                 </button>
                             </div>
