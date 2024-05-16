@@ -26,7 +26,7 @@ const FeatureRooms = ({room}) => {
           name , email,deadline , roomId
       }
       try {
-          const response = await axios.post('http://localhost:5000/booking', bookData);
+          const response = await axios.post('https://hotel-wave-server.vercel.app/booking', bookData);
           console.log(response.data);
           Swal.fire({
             position: "center",
@@ -43,7 +43,7 @@ const FeatureRooms = ({room}) => {
 
   const handleStatus = async (id, prevStatus, status) => {
     const { data } = await axios.patch(
-        `http://localhost:5000/feature-room/${id}`, { status }
+        `https://hotel-wave-server.vercel.app/feature-room/${id}`, { status }
     )
     console.log(data)
 }

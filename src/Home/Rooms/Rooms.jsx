@@ -11,7 +11,7 @@ const Rooms = () => {
 
 
  useEffect(() =>{
-    fetch('http://localhost:5000/rooms')
+    fetch('https://hotel-wave-server.vercel.app/rooms')
     .then(res => res.json())
     .then(data => setRoom(data));
 

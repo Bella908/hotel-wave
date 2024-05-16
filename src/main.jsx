@@ -47,14 +47,14 @@ const router = createBrowserRouter([
         
           path:'/rooms',
           element:<Rooms></Rooms>,
-          loader: () => fetch('http://localhost:5000/rooms'),
+          loader: () => fetch('https://hotel-wave-server.vercel.app/rooms'),
       
       },
       {
         
           path:'/rooms/:id',
           element:<RoomDetails></RoomDetails>,
-          loader: ({params}) => fetch(`http://localhost:5000/rooms/${params.id}`),
+          loader: ({params}) => fetch(`https://hotel-wave-server.vercel.app/rooms/${params.id}`),
       
       },
       {
@@ -70,7 +70,7 @@ const router = createBrowserRouter([
         
           path:'/feature',
           element:<FeatureRoom></FeatureRoom>,
-          loader: () => fetch('http://localhost:5000/feature'),
+          loader: () => fetch('https://hotel-wave-server.vercel.app/feature'),
           
           
         },

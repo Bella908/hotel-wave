@@ -21,7 +21,7 @@ const MyLists = () => {
     const [startDate, setStartDate] = useState(new Date());
 
 
-    const url = `http://localhost:5000/myBooking?email=${user.email}`;
+    const url = `https://hotel-wave-server.vercel.app/myBooking?email=${user.email}`;
 
     useEffect(() => {
         fetch(url)
@@ -42,7 +42,7 @@ const MyLists = () => {
         }).then((result) => {
             if (result.isConfirmed) {
                 // If confirmed, proceed with deletion
-                fetch(`http://localhost:5000/myBooking/delete/${id}`, {
+                fetch(`https://hotel-wave-server.vercel.app/myBooking/delete/${id}`, {
                     method: "DELETE",
                 })
                     .then(res => res.json())
@@ -62,7 +62,7 @@ const MyLists = () => {
         });
 
             const { data } = await axios.patch(
-                `http://localhost:5000/booking/${id}`, { status : 'true' }
+                `https://hotel-wave-server.vercel.app/booking/${id}`, { status : 'true' }
             )
             console.log(data)
         
@@ -83,7 +83,7 @@ const handleReviewSubmit = async (e) => {
     };
 
     try {
-        const response = await axios.post("http://localhost:5000/review", reviewData);
+        const response = await axios.post("https://hotel-wave-server.vercel.app/review", reviewData);
         console.log(response.data);
 
         // Add the newly submitted review to the existing reviews
@@ -112,7 +112,7 @@ const handleReviewSubmit = async (e) => {
         const deadline = startDate;
         const bookData = { deadline }; // Only include the deadline field
         try {
-            const response = await axios.put(`http://localhost:5000/myBooking/update/${isOpen._id}`, bookData);
+            const response = await axios.put(`https://hotel-wave-server.vercel.app/myBooking/update/${isOpen._id}`, bookData);
             console.log(response.data);
             // Notify the user of the update using SweetAlert
             Swal.fire({

@@ -14,7 +14,7 @@ const Update = () => {
 
 
     useEffect(() =>{
-        fetch(`http://localhost:5000/myBooking/update/${id}`)
+        fetch(`https://hotel-wave-server.vercel.app/myBooking/update/${id}`)
        .then(res => res.json())
        .then(data =>{
            setSpot(data)
