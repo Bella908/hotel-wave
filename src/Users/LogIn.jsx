@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import { AuthContext } from "../AuthProvider/AuthProvider";
 import { useContext } from "react";
+import { Helmet } from "react-helmet";
 
 
 const LogIn = () => {
@@ -61,6 +62,9 @@ const LogIn = () => {
 
     return (
        <div>
+         <Helmet>
+            <title>Hotal Wave | Log-In</title>
+            </Helmet>
      <form  onSubmit={handlelogIn}> 
             <div className="h-[100vh] items-center flex justify-center px-5 lg:px-0 bg-cover   " style={{backgroundImage: 'url(https://www.sanantonio-santorini.com/wp-content/uploads/2016/03/superiorsuite-slide02.jpg)'}}>
       <div className="max-w-screen-xl  flex justify-center flex-1">
