@@ -8,7 +8,7 @@ const Room = ({ room }) => {
   return (
     <div>
 
-      <div className="card w-[580px]  ring-1 ring-slate-400  mx-20 mt-10 rounded-none ">
+      <div className="card w-[580px]  ring-1 ring-slate-400  lg:mx-20 mt-10 rounded-none ">
         <figure className="px-10 pt-10">
           <img src={RoomImage} alt="Shoes" className="" />
         </figure>

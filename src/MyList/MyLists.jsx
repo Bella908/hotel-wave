@@ -142,7 +142,7 @@ const handleReviewSubmit = async (e) => {
 
         <div>
               <Helmet>
-            <title>Hotal Wave | My Bookings</title>
+            <title>Hotal Wave | My Booking</title>
             </Helmet>
 
             <div className="relative">
