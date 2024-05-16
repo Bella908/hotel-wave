@@ -64,31 +64,7 @@ const RoomDetails = () => {
     }
 
 
-    // review
-    // review
-    // const handleReviewSubmit = async (e) => {
-    //     e.preventDefault();
-    //     const reviewData = {
-    //         content: reviewContent,
-    //         rating: rating,
-    //         roomId: room._id,
-    //         userId: user.email,
-    //         userName: user.displayName,
-    //     };
-
-    //     try {
-    //         const response = await axios.post("http://localhost:5000/review", reviewData);
-    //         console.log(response.data);
-
-    //         // Add the newly submitted review to the existing reviews
-    //         setReviews([...review, response.data]);
-    //         setReviewContent(""); // Clear the review content input field
-    //         setRating(0); // Reset the rating input field
-
-    //     } catch (error) {
-    //         console.error("Error occurred during review submission:", error);
-    //     }
-    // };
+   
 
 
 
@@ -166,7 +142,8 @@ const RoomDetails = () => {
  
                 <div className="mb-10">
                     <div>
-                        <h4 className="text-3xl font-Briem text-center my-6">Reviews</h4>
+                        <h4 className="text-3xl font-Briem text-center">Reviews</h4>
+                        <h5 className="text-center ">To add a review please Book a room first </h5>
                     </div>
                     {
                         review.map(reviews => <div key={reviews.id}>
@@ -195,29 +172,7 @@ const RoomDetails = () => {
                         )
                     }
                 </div>
-                {/* <div className="ml-20 mt-24">
-                    <h4 className="text-3xl font-Briem text-center mb-4">Post a Review</h4>
-                    <div className="flex items-center mb-4">
-                        <h4 className="mx-2">Rating : </h4>
-                        <input
-                            type="number"
-                            className="input input-primary w-16 mr-4"
-                            placeholder="Rating"
-                            value={rating}
-                            onChange={(e) => setRating(e.target.value)}
-                        />
-                        <textarea
-                            className="textarea textarea-primary w-15"
-                            placeholder="Write your review here..."
-                            value={reviewContent}
-                            onChange={(e) => setReviewContent(e.target.value)}
-                        ></textarea>
-                        <button className="btn btn-outline border-rose-400 text-rose-400 ml-4" onClick={handleReviewSubmit}>
-                            Submit Review
-                        </button>
-                    </div>
-                </div> */}
-
+            
             </div>
 
             {/* Modal */}
