@@ -26,37 +26,27 @@ const RoomDetails = () => {
 
     // booking
    // booking
-   const handleBooking = async (e) => {
+   const handleBooking = async e => {
     e.preventDefault();
     const form = e.target;
     const name = form.roomName.value;
     const email = form.email.value;
     const deadline = startDate;
-    const roomId = _id;
+    const roomId = { _id }
     const bookData = {
         name, email, deadline, roomId
-    };
-
+    }
     try {
         const response = await axios.post('http://localhost:5000/booking', bookData);
         console.log(response.data);
-
-        if (response.data.success) {
-            setRoom({ ...room, Availability: false });
-            await axios.patch(`http://localhost:5000/booking/${roomId}`, { status: false });
-            // Show sweet alert
-            Swal.fire({
-                title: 'Booking Successful!',
-                text: 'Your room has been booked.',
-                icon: 'success',
-                confirmButtonText: 'Ok'
-            });
-        }
     } catch (error) {
         console.error("Error occurred during booking:", error);
     }
     setIsOpen(false);
-};
+    
+    
+}
+
 
 
     // review
@@ -236,7 +226,7 @@ const RoomDetails = () => {
                                     <button onClick={() => setIsOpen(false)} className="px-4 sm:mx-2 w-full py-2.5 text-sm font-medium dark:text-gray-200 dark:border-gray-700 dark:hover:bg-gray-800 tracking-wide text-gray-700 capitalize transition-colors duration-300 transform border border-gray-200 rounded-md hover:bg-gray-100 focus:outline-none focus:ring focus:ring-gray-300 focus:ring-opacity-40">
                                         Cancel
                                     </button>
-                                    <button type="submit" className="px-4 sm:mx-2 w-full py-2.5 mt-3 sm:mt-0 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-600 rounded-md hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40">
+                                    <button type="submit" onClick={() => handleStatus} className="px-4 sm:mx-2 w-full py-2.5 mt-3 sm:mt-0 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-600 rounded-md hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40">
                                         Confirm
                                     </button>
                                 </div>
