@@ -3,6 +3,7 @@
 import Room from './Room';
 import { useEffect } from "react";
 import { useState } from "react";
+import { Helmet } from 'react-helmet';
 
 
 const Rooms = () => {
@@ -17,6 +18,9 @@ const Rooms = () => {
  },[])
     return (
         <div className=''>
+            <Helmet>
+            <title>Hotal Wave | Rooms</title>
+            </Helmet>
          <div className="relative">
     <img src="https://images.unsplash.com/photo-1578683010236-d716f9a3f461?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="" />
     <h3 className="absolute top-52 left-0 w-full text-center text-black mt-24 font-Briem text-7xl">Rooms</h3>
