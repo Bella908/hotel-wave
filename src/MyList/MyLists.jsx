@@ -161,6 +161,12 @@ const MyLists = () => {
                                     </div>
 
                                     <button onClick={() => handleDelete(book._id)} className="btn btn-outline btn-error">Cancel</button>
+                                    <div className="mt-3">
+
+                                    <Link to={`/rooms/${book._id}`}>
+                                    <button  className="btn btn-outline btn-info">Post a Review</button>
+                                    </Link>
+                                    </div>
 
                                 </td>
                             </tr>)

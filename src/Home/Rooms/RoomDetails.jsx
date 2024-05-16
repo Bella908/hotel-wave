@@ -4,60 +4,88 @@ import { AuthContext } from "../../AuthProvider/AuthProvider";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import axios from "axios";
+import Swal from "sweetalert2";
 
 const RoomDetails = () => {
     const [isOpen, setIsOpen] = useState(false); // Changed initial state to false
     const [startDate, setStartDate] = useState(new Date());
-    const [review , setReviews] = useState();
+    const [review, setReviews] = useState([]);
     const room = useLoaderData();
     const { user } = useContext(AuthContext);
     const [reviewContent, setReviewContent] = useState("");
     const [rating, setRating] = useState(0);
+    const [roomm , setRoom] = useState([]);
 
-    const { category, RoomImage, RoomDescription, PricePerNight, RoomSize, _id } = room;
+    const { category, RoomImage, RoomDescription, PricePerNight, RoomSize, _id ,Availability
+    } = room;
+
+  
+
+
 
 
     // booking
-    const handleBooking = async e => {
-        e.preventDefault();
-        const form = e.target;
-        const name = form.roomName.value;
-        const email = form.email.value;
-        const deadline = startDate;
-        const roomId = { _id }
-        const bookData = {
-            name, email, deadline, roomId
-        }
-        try {
-            const response = await axios.post('http://localhost:5000/booking', bookData);
-            console.log(response.data);
-        } catch (error) {
-            console.error("Error occurred during booking:", error);
-        }
-        setIsOpen(false);
-    }
+   // booking
+   const handleBooking = async (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const name = form.roomName.value;
+    const email = form.email.value;
+    const deadline = startDate;
+    const roomId = _id;
+    const bookData = {
+        name, email, deadline, roomId
+    };
 
+    try {
+        const response = await axios.post('http://localhost:5000/booking', bookData);
+        console.log(response.data);
+
+        if (response.data.success) {
+            setRoom({ ...room, Availability: false });
+            await axios.patch(`http://localhost:5000/booking/${roomId}`, { status: false });
+            // Show sweet alert
+            Swal.fire({
+                title: 'Booking Successful!',
+                text: 'Your room has been booked.',
+                icon: 'success',
+                confirmButtonText: 'Ok'
+            });
+        }
+    } catch (error) {
+        console.error("Error occurred during booking:", error);
+    }
+    setIsOpen(false);
+};
+
+
+    // review
     // review
     const handleReviewSubmit = async (e) => {
         e.preventDefault();
         const reviewData = {
             content: reviewContent,
             rating: rating,
-
             roomId: room._id,
             userId: user.email,
+            userName : user.displayName,
         };
 
         try {
             const response = await axios.post("http://localhost:5000/review", reviewData);
             console.log(response.data);
-            // Optionally, you can update UI to show the review has been submitted successfully
+
+            // Add the newly submitted review to the existing reviews
+            setReviews([...review, response.data]);
+            setReviewContent(""); // Clear the review content input field
+            setRating(0); // Reset the rating input field
         } catch (error) {
             console.error("Error occurred during review submission:", error);
         }
     };
-  
-   
+
+
+
 
     useEffect(() => {
         const fetchReviews = async () => {
@@ -71,7 +99,7 @@ const RoomDetails = () => {
         fetchReviews();
     }, [_id]);
 
-
+    console.log(review)
 
 
     return (
@@ -95,18 +123,19 @@ const RoomDetails = () => {
                 <div className="my-10 ml-20">
                     {/* Modal Trigger Button */}
                     {
-                        user?
-                        <>
-                        <button className="btn bg-[#043BD4] text-white" onClick={() => setIsOpen(true)}>Book Now</button>
-                      
-                        </> :
+                        user ?
+                            <>
+                                <button className="btn bg-[#043BD4] text-white" onClick={() => setIsOpen(true)}>Book Now</button>
 
-                  <>
-                  <Link to="/login">
-                  
-                    <button className="btn bg-[#043BD4] text-white">Book Now</button>
-                  </Link>   
-                  </>   
+                            </> :
+
+                            <>
+                                <Link to="/login">
+
+                                    <button className="btn bg-[#043BD4] text-white">Book Now</button>
+                                </Link>
+                            </>
+
                     }
                 </div>
 
@@ -114,9 +143,37 @@ const RoomDetails = () => {
 
                 {/* Review section */}
                 <div>
-                    
+                    <div>
+                    <h4 className="text-3xl font-Briem text-center my-6">Reviews</h4>
+                    </div>
+                    {
+                        review.map(reviews => <div key={reviews.id}>
+                            <div className="card w-[500px]  ring-1 ring-slate-400  mx-20 mt-3 rounded ">
+
+                                <div className="flex">
+
+                                    <div className="" >
+                                        
+
+                                        <h4 className=" m-4">{reviews.userName}</h4>
+                                    
+                                    </div>
+                                </div>
+                                <div className=" m-4">
+                                   
+                                    <p>Rating : {reviews.rating}</p>
+                                    <p>Comment: {reviews.content}</p>
+
+
+
+                                </div>
+                            </div>
+                        </div>
+                
+                        )
+                        }
                 </div>
-                <div className="ml-20">
+                <div className="ml-20 mt-24">
                     <h4 className="text-3xl font-Briem text-center mb-4">Post a Review</h4>
                     <div className="flex items-center mb-4">
                         <h4 className="mx-2">Rating : </h4>
