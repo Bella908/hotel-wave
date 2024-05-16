@@ -21,13 +21,18 @@ const MyLists = () => {
     const [startDate, setStartDate] = useState(new Date());
 
 
-    const url = `https://hotel-wave-server.vercel.app/myBooking?email=${user.email}`;
+  
 
     useEffect(() => {
-        fetch(url)
-            .then(res => res.json())
-            .then(data => setBookings(data))
-    }, [url])
+
+
+        if (user?.email){
+        
+            fetch(`https://hotel-wave-server.vercel.app/myBooking?email=${user?.email}`)
+                .then(res => res.json())
+                .then(data => setBookings(data))
+        }
+    }, [user?.email])
 
     const handleDelete = async (id) => {
         // Display SweetAlert confirmation dialog
@@ -41,16 +46,16 @@ const MyLists = () => {
             confirmButtonText: "Yes, delete it!"
         }).then((result) => {
             if (result.isConfirmed) {
-                // If confirmed, proceed with deletion
+                
                 fetch(`https://hotel-wave-server.vercel.app/myBooking/delete/${id}`, {
                     method: "DELETE",
                 })
                     .then(res => res.json())
                     .then(data => {
                         if (data.deletedCount > 0) {
-                            // Update the bookings state after deletion
+                            
                             setBookings(prevBookings => prevBookings.filter(book => book._id !== id));
-                            // Show success message after deletion
+                        
                             Swal.fire({
                                 title: "Deleted!",
                                 text: "Your file has been deleted.",
