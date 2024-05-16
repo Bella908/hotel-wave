@@ -4,7 +4,7 @@ import logo2 from '../assets/logo2.png'
 const Footer = () => {
     return (
         <div>
-            <footer className="footer p-10 bg-base-200 text-base-content">
+            <footer className="footer p-10 bg-base-200 text-base-content mt-11">
   <aside>
   <div>
 

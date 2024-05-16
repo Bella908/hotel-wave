@@ -14,10 +14,7 @@ const RoomDetails = () => {
     const [review, setReviews] = useState([]);
     const room = useLoaderData();
     const { user } = useContext(AuthContext);
-    const [reviewContent, setReviewContent] = useState("");
-    const [rating, setRating] = useState(0);
-    const [roomm, setRoom] = useState([]);
-
+   
     const { category, RoomImage, RoomDescription, PricePerNight, RoomSize, _id, status
     } = room;
 
