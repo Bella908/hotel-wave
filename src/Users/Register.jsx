@@ -5,6 +5,7 @@ import Swal from 'sweetalert2'
 
 import { updateProfile } from "firebase/auth";
 import { AuthContext } from '../AuthProvider/AuthProvider';
+import { Helmet } from 'react-helmet';
 const Register = () => {
  const {createUser , setUser } = useContext(AuthContext)
  const [registerError , setRegisterError ] = useState('');
@@ -80,6 +81,9 @@ createUser(email,password,photoURL)
   }
     return (
         <div >
+           <Helmet>
+            <title>Hotal Wave | Register</title>
+            </Helmet>
           <form onSubmit={handleRegister}> 
             <div className="h-[100vh] items-center flex justify-center px-5 lg:px-0" style={{backgroundImage: 'url(https://images.unsplash.com/photo-1607791330875-6ea2286ef54b?q=80&w=2074&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D)'}}>
       <div className="max-w-screen-xl flex justify-center flex-1">
