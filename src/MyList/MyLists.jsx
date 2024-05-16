@@ -1,11 +1,12 @@
 import { useContext, useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
 import { AuthContext } from "../AuthProvider/AuthProvider";
-import { Link, json } from "react-router-dom";
-import Swal from "sweetalert2";
-import { update } from "firebase/database";
-import axios from "axios";
 
+import Swal from "sweetalert2";
+
+import axios from "axios";
+import {Helmet} from "react-helmet";
+ 
 
 
 const MyLists = () => {
@@ -140,6 +141,10 @@ const handleReviewSubmit = async (e) => {
     return (
 
         <div>
+              <Helmet>
+            <title>Hotal Wave | My Bookings</title>
+            </Helmet>
+
             <div className="relative">
                 <img src="https://images.unsplash.com/photo-1560801142-cc7133998a71?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="" />
                 <h3 className="absolute top-52 left-0 w-full text-center text-white mt-24 font-Briem text-7xl">My Booking</h3>
